@@ -1,5 +1,6 @@
 package com.rabbi.services.impl;
 
+import com.rabbi.exception.GenreException;
 import com.rabbi.mapper.GenreMapper;
 import com.rabbi.model.Genre;
 import com.rabbi.payload.dto.GenreDTO;
@@ -34,12 +35,20 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDTO getGenreById(Long genreId) {
-        return null;
+    public GenreDTO getGenreById(Long genreId) throws GenreException {
+        Genre genre = genreRepository.findById(genreId).orElseThrow(
+                () -> new GenreException("Genre not found with id: " + genreId)
+        );
+
+        return genreMapper.toDTO(genre);
     }
 
     @Override
-    public GenreDTO updateGenre(Long genreId, GenreDTO genreDTO) {
+    public GenreDTO updateGenre(Long genreId, GenreDTO genreDTO) throws GenreException {
+        Genre existingGenre = genreRepository.findById(genreId).orElseThrow(
+                () -> new GenreException("Genre not found with id: " + genreId)
+        );
+
         return null;
     }
 

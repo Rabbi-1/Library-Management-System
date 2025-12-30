@@ -1,5 +1,6 @@
 package com.rabbi.services;
 
+import com.rabbi.exception.GenreException;
 import com.rabbi.model.Genre;
 import com.rabbi.payload.dto.GenreDTO;
 
@@ -14,9 +15,9 @@ public interface GenreService {
 
     List<GenreDTO> getAllGenres();
 
-    GenreDTO getGenreById(Long genreId);
+    GenreDTO getGenreById(Long genreId) throws GenreException;
 
-    GenreDTO updateGenre(Long genreId, GenreDTO genreDTO);
+    GenreDTO updateGenre(Long genreId, GenreDTO genreDTO) throws GenreException;
 
     void deleteGenre(Long genreId);
 
