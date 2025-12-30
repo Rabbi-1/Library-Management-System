@@ -1,6 +1,7 @@
 package com.rabbi.controller;
 
 import com.rabbi.model.Genre;
+import com.rabbi.payload.dto.GenreDTO;
 import com.rabbi.services.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
@@ -17,8 +18,9 @@ public class GenreController {
     private final GenreService genreService;
 
     @PostMapping("/create")
-    public ResponseEntity<Genre> addGenre(@RequestBody Genre genre) {
-        Genre createdGenre = genreService.createGenre(genre);
+    public ResponseEntity<GenreDTO> addGenre(@RequestBody GenreDTO genre) {
+        GenreDTO createdGenre = genreService.createGenre(genre);
         return ResponseEntity.ok(createdGenre);
+
     }
 }
