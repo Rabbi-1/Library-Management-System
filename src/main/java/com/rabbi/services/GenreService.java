@@ -23,7 +23,7 @@ public interface GenreService {
 
     void hardDeleteGenre(Long genreId) throws GenreException;
 
-    List<GenreDTO> getActiveGenresWithSubGenres();
+    List<GenreDTO> getAllActiveGenresWithSubGenres();
 
     List<GenreDTO> getTopLevelGenres();
 
