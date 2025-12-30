@@ -1,11 +1,7 @@
 package com.rabbi.services;
-
 import com.rabbi.exception.GenreException;
-import com.rabbi.model.Genre;
 import com.rabbi.payload.dto.GenreDTO;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 
 import java.util.List;

@@ -4,7 +4,6 @@ import com.rabbi.model.Genre;
 import com.rabbi.payload.dto.GenreDTO;
 import com.rabbi.repo.GenreRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -91,6 +90,6 @@ public class GenreMapper {
     }
 
     public List<GenreDTO> toDTOList(List<Genre> genreList){
-        return genreList.stream().map(genre -> toDTO(genre)).collect(Collectors.toList());
+        return genreList.stream().map(this::toDTO).collect(Collectors.toList());
     }
 }
