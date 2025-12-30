@@ -1,5 +1,6 @@
 package com.rabbi.services.impl;
 
+import com.rabbi.mapper.GenreMapper;
 import com.rabbi.model.Genre;
 import com.rabbi.payload.dto.GenreDTO;
 import com.rabbi.repo.GenreRepository;
@@ -7,12 +8,14 @@ import com.rabbi.services.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
-
     @Override
     public GenreDTO createGenre(GenreDTO genreDTO) {
        // return genreRepository.save(genreDTO);
@@ -24,35 +27,22 @@ public class GenreServiceImpl implements GenreService {
                 .active(true)
                 .build();
 
-
         if(genreDTO.getParentGenreId() != null) {
             Genre parentGenre = genreRepository.findById(genreDTO.getParentGenreId()).get();
             genre.setParentGenre(parentGenre);
         }
 
-
         Genre savedGenre = genreRepository.save(genre);
+        GenreDTO dto = GenreMapper.toDTO(savedGenre);
 
-        GenreDTO dto = GenreDTO.builder()
-                .id(savedGenre.getId())
-                .code(savedGenre.getCode())
-                .name(savedGenre.getName())
-                .description(savedGenre.getDescription())
-                .displayOrder(savedGenre.getDisplayOrder())
-                .active(savedGenre.getActive())
-                .createAt(savedGenre.getCreateAt())
-                .updatedAt(savedGenre.getUpdatedAt())
-                .build();
-        if(savedGenre.getParentGenre() != null) {
-            dto.setParentGenreId(savedGenre.getParentGenre().getId());
-            dto.setParentGenreName(savedGenre.getParentGenre().getName());
-        }
-
-//        dto.setSubGenres(savedGenre.getSubGenres().stream()
-//                .filter(subGenre-> subGenre.getActive())
-//                .map(subGenre ->));
-//        dto.setBookCount(long(savedGenre.get));
         return dto;
+    }
+
+    @Override
+    public List<GenreDTO> getAllGenres() {
+        return genreRepository.findAll().stream()
+                .map(GenreMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }
 

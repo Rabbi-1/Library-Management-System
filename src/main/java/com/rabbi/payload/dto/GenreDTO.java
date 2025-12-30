@@ -1,7 +1,6 @@
 package com.rabbi.payload.dto;
 
 
-import com.rabbi.model.Genre;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
