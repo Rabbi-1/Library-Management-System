@@ -1,0 +1,51 @@
+package com.rabbi.payload.dto;
+
+
+import com.rabbi.model.Genre;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class GenreDTO {
+
+    private Long id;
+
+    @NotBlank(message = "Genre code is mandatory")
+    private String code;
+
+    @NotBlank(message = "Genre name is mandatory")
+    private String name;
+
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
+    private String description;
+
+    @Min(value = 0, message = "Display order must be a non-negative integer")
+    private Integer displayOrder = 0;
+
+    private Boolean active;
+
+    private Long parentGenreId;
+
+    private String parentGenreName;
+
+    private List<GenreDTO> subGenres;
+
+    private Long bookCount;
+
+    private LocalDateTime createAt;
+
+    private LocalDateTime updatedAt;
+
+
+}
