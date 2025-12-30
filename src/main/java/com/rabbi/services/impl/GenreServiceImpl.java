@@ -16,33 +16,61 @@ import java.util.stream.Collectors;
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
+    private final GenreMapper genreMapper;
+
     @Override
     public GenreDTO createGenre(GenreDTO genreDTO) {
-       // return genreRepository.save(genreDTO);
-        Genre genre = Genre.builder()
-                .code(genreDTO.getCode())
-                .name(genreDTO.getName())
-                .description(genreDTO.getDescription())
-                .displayOrder(genreDTO.getDisplayOrder())
-                .active(true)
-                .build();
-
-        if(genreDTO.getParentGenreId() != null) {
-            Genre parentGenre = genreRepository.findById(genreDTO.getParentGenreId()).get();
-            genre.setParentGenre(parentGenre);
-        }
-
+        Genre genre = genreMapper.toEntity(genreDTO);
         Genre savedGenre = genreRepository.save(genre);
-        GenreDTO dto = GenreMapper.toDTO(savedGenre);
 
-        return dto;
+        return genreMapper.toDTO(savedGenre);
     }
 
     @Override
     public List<GenreDTO> getAllGenres() {
         return genreRepository.findAll().stream()
-                .map(GenreMapper::toDTO)
+                .map(genreMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public GenreDTO getGenreById(Long genreId) {
+        return null;
+    }
+
+    @Override
+    public GenreDTO updateGenre(Long genreId, GenreDTO genreDTO) {
+        return null;
+    }
+
+    @Override
+    public void deleteGenre(Long genreId) {
+
+    }
+
+    @Override
+    public void hardDeleteGenre(Long genreId) {
+
+    }
+
+    @Override
+    public List<GenreDTO> getActiveGenresWithSubGenres() {
+        return List.of();
+    }
+
+    @Override
+    public List<GenreDTO> getTopLevelGenres() {
+        return List.of();
+    }
+
+    @Override
+    public long getTotalActiveGenres() {
+        return 0;
+    }
+
+    @Override
+    public long getBookCountByGenreId(Long genreId) {
+        return 0;
     }
 }
 

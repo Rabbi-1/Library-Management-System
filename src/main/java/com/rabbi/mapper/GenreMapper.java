@@ -2,12 +2,20 @@ package com.rabbi.mapper;
 
 import com.rabbi.model.Genre;
 import com.rabbi.payload.dto.GenreDTO;
+import com.rabbi.repo.GenreRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
-
+@RequiredArgsConstructor
+@Component
 public class GenreMapper {
 
-    public static GenreDTO toDTO(Genre savedGenre) {
+
+    private final GenreRepository genreRepository;
+
+    public GenreDTO toDTO(Genre savedGenre) {
         if (savedGenre == null) {
             return null;
         }
@@ -29,13 +37,33 @@ public class GenreMapper {
         }
         if(savedGenre.getSubGenres() != null && !savedGenre.getSubGenres().isEmpty()) { // only do this if there are sub genres
             dto.setSubGenres(savedGenre.getSubGenres().stream()
-                    .filter(Genre::getActive) // only include active sub genres
-                    .map(GenreMapper::toDTO).collect(Collectors.toList()));
+                    .filter(Genre::getActive) // only include active sub-genres
+                    .map(this::toDTO).collect(Collectors.toList()));
 
         }
 
 //        dto.setBookCount(long(savedGenre.get));
 
         return dto;
+    }
+
+    public Genre toEntity(GenreDTO genreDTO) {
+        if (genreDTO == null) {
+            return null;
+        }
+        Genre genre = Genre.builder()
+                .code(genreDTO.getCode())
+                .name(genreDTO.getName())
+                .description(genreDTO.getDescription())
+                .displayOrder(genreDTO.getDisplayOrder())
+                .active(true)
+                .build();
+
+        if(genreDTO.getParentGenreId() != null) {
+            genreRepository.findById(genreDTO.getParentGenreId())
+                    .ifPresent(genre::setParentGenre);
+        }
+
+        return genre;
     }
 }
