@@ -19,7 +19,7 @@ public interface GenreService {
 
     GenreDTO updateGenre(Long genreId, GenreDTO genreDTO) throws GenreException;
 
-    void deleteGenre(Long genreId);
+    void deleteGenre(Long genreId) throws GenreException;
 
     void hardDeleteGenre(Long genreId);
 
