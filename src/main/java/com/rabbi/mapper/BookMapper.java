@@ -76,6 +76,8 @@ public class BookMapper {
         return book;
 
     }
+
+    //TODO: updateEntityFromDTO method can be added here if needed in future
 }
 //BookMapper converts Book entities into BookDTO objects
 // for use in API responses. It prepares book data in a
