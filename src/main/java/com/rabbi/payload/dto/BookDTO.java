@@ -71,5 +71,10 @@ public class BookDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
 }
+
+//BookDTO is used to send and receive book data through the API.
+//It defines what information about a book is shared with clients
+// and ensures that incoming data is valid. This class keeps the API
+// separate from the database model and allows extra, request-specific
+// information to be included without affecting how books are stored.

@@ -44,5 +44,11 @@ public class GenreDTO {
 
     private LocalDateTime updatedAt;
 
-
 }
+
+//GenreDTO is used to send and receive genre data through the API.
+// It defines what information about a genre is shared with clients,
+// including parent and sub-genre relationships, without exposing the
+// database entity directly. This class keeps API communication clean
+// and safe while supporting category navigation, display, and management
+// features.

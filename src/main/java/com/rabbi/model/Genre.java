@@ -57,3 +57,8 @@ public class Genre {
     private LocalDateTime updatedAt;
 
 }
+
+//Genre represents the category system used to organize books in the application.
+//It models a hierarchical structure where genres can have parent and sub-genres, allowing flexible classification and navigation.
+//Each genre is stored as a persistent entity with its own lifecycle, including activation status, display ordering, and audit timestamps.
+//This separation allows genres to be managed independently of books while supporting filtering, searching, and structured presentation across the system.

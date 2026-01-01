@@ -75,3 +75,12 @@ public class Book {
     }
 
 }
+    /**
+    Book represents a single physical or logical book item in the system.
+    It serves as the core domain entity that stores identifying, descriptive,
+    and inventory-related information about a book, including its title, author, ISBN, and publication details.
+    Each book is associated with exactly one genre, enabling structured classification and filtering across the application.
+    The class also tracks availability and inventory state (total vs. available copies),
+    pricing, activation status, and audit timestamps, making
+    it suitable for both catalog display and inventory management workflows.
+     */
