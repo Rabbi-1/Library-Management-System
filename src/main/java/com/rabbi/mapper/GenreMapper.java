@@ -93,3 +93,14 @@ public class GenreMapper {
         return genreList.stream().map(this::toDTO).collect(Collectors.toList());
     }
 }
+
+
+//GenreMapper is responsible for converting
+// between Genre entities and GenreDTO objects.
+//It acts as a bridge between the database model
+// and the API layer, ensuring that genre data is
+// formatted correctly for clients and safely
+// transformed back into entities when saving or updating data.
+//This keeps the domain model clean, prevents
+// direct exposure of entities, and centralizes
+// all genre-related mapping logic in one place.
