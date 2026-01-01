@@ -77,12 +77,58 @@ public class BookMapper {
 
     }
 
-    //TODO: updateEntityFromDTO method can be added here if needed in future
+    public void updateEntityFromDTO(BookDTO dto, Book book) throws BookException {
+        if (dto == null || book == null) {
+            return;
+        }
+        book.setTitle(dto.getTitle());
+        book.setAuthor(dto.getAuthor());
+
+        if (dto.getGenreId() != null) {
+            Genre genre = genreRepository.findById(dto.getGenreId())
+                    .orElseThrow(() -> new BookException("Genre not found with id: " + dto.getGenreId()));
+            book.setGenre(genre);
+    }
+        book.setPublisher(dto.getPublisher());
+        book.setPublicationDate(dto.getPublicationDate());
+        book.setLanguage(dto.getLanguage());
+        book.setPages(dto.getPages());
+        book.setDescription(dto.getDescription());
+        book.setTotalCopies(dto.getTotalCopies());
+        book.setAvailableCopies(dto.getAvailableCopies());
+        book.setPrice(dto.getPrice() != null ? java.math.BigDecimal.valueOf(dto.getPrice()) : null);
+        book.setCoverImageUrl(dto.getCoverImageUrl());
+
+        if(dto.getActive() != null) {
+            book.setActive(dto.getActive());
+        }
+    }
 }
-//BookMapper converts Book entities into BookDTO objects
-// for use in API responses. It prepares book data in a
-// client-friendly format by flattening related information,
-// such as genre details, and ensures the API does not expose
-// the database entity directly. This class keeps mapping logic
-// in one place and helps maintain a clean separation between
-// the persistence layer and the API layer.
+
+/**
+ BookMapper
+----------
+    Purpose:
+ - Converts between Book (database entity) and BookDTO (API data)
+
+    Methods:
+ - toDTO(Book)
+  → Entity → DTO
+  → Used when returning book data to the client
+
+- toEntity(BookDTO)
+  → DTO → Entity
+  → Used when creating a new book
+  → Fetches Genre by genreId (throws error if not found)
+
+- updateEntityFromDTO(BookDTO, Book)
+  → Updates an existing Book
+  → Overwrites fields from DTO
+  → Updates Genre only if genreId is provided
+
+ Key Rule:
+- Genre is always validated via GenreRepository
+- DTO = API layer
+- Entity = Database layer
+
+*/
