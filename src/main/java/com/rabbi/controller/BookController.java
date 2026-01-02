@@ -5,11 +5,11 @@ import com.rabbi.exception.BookException;
 import com.rabbi.payload.dto.BookDTO;
 import com.rabbi.payload.request.BookSearchRequest;
 import com.rabbi.payload.response.ApiResponse;
+import com.rabbi.payload.response.BookStatsResponse;
 import com.rabbi.payload.response.PagesResponse;
 import com.rabbi.services.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +41,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BookDTO> updateBook(@PathVariable Long id, @Valid @RequestBody BookDTO bookDTO) throws BookException {
+    public ResponseEntity<BookDTO> updateBook(@PathVariable Long id, @RequestBody BookDTO bookDTO) throws BookException {
         BookDTO updatedBook = bookService.updateBook(id, bookDTO);
         return ResponseEntity.ok(updatedBook);
     }
@@ -57,11 +57,46 @@ public class BookController {
         bookService.hardDeleteBook(id);
         return ResponseEntity.ok(new ApiResponse("Book permanently deleted successfully", true));
     }
+    @GetMapping
+    public ResponseEntity<PagesResponse<BookDTO>> searchBooks(
+            @RequestParam(required = false) Long genreId,
+            @RequestParam(required = false) Boolean availableOnly,
+            @RequestParam(defaultValue = "true") boolean activeOnly,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection
+    ) {
+        BookSearchRequest searchRequest = new BookSearchRequest();
+        searchRequest.setGenreId(genreId);
+        searchRequest.setAvailableOnly(availableOnly);
+        searchRequest.setPage(page);
+        searchRequest.setSize(size);
+        searchRequest.setSortBy(sortBy);
+        searchRequest.setSortDirection(sortDirection);
 
+        PagesResponse<BookDTO> books = bookService.searchBooksWithFilters(searchRequest);
+        return ResponseEntity.ok(books);
+
+    }
+
+    @PostMapping("/search")
     public ResponseEntity<PagesResponse<BookDTO>> advancedSearch(@RequestBody BookSearchRequest searchRequest) {
         PagesResponse<BookDTO> books = bookService.searchBooksWithFilters(searchRequest);
         return ResponseEntity.ok(books);
     }
-    //TODO: Add endpoints for total active and available books
+
+    @GetMapping("/stats")
+    public ResponseEntity<BookStatsResponse> getBookStats() {
+        long totalActiveBooks = bookService.getTotalActiveBooks();
+        long totalAvailableBooks = bookService.getTotalAvailableBooks();
+
+        BookStatsResponse statsResponse = new BookStatsResponse(totalActiveBooks, totalAvailableBooks);
+        return ResponseEntity.ok(statsResponse);
+    }
+
+
+
+
     //TODO: Review Controller for book
 }
