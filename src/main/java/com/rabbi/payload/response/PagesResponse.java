@@ -1,5 +1,6 @@
 package com.rabbi.payload.response;
 
+import com.rabbi.payload.dto.BookDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,6 @@ public class PagesResponse<T> {
     private boolean lastPage;
     private boolean firstPage;
     private boolean empty;
+
 
 }
