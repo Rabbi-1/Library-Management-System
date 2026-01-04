@@ -1,12 +1,10 @@
 package com.rabbi.payload.dto;
 
-import com.rabbi.domain.AuthProvider;
 import com.rabbi.domain.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+
 
 import java.time.LocalDateTime;
 @Data
@@ -19,7 +17,7 @@ public class UserDTO {
     private String phone;
     private String fullName;
     private UserRole role;
-    private String username;;
+    private String username;
     private LocalDateTime lastLogin;
 
 }
