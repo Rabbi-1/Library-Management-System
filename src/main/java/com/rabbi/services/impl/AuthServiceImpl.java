@@ -1,7 +1,9 @@
 package com.rabbi.services.impl;
 
+import com.rabbi.configuration.JwtProvider;
 import com.rabbi.domain.UserRole;
 import com.rabbi.exception.UserException;
+import com.rabbi.mapper.UserMapper;
 import com.rabbi.model.User;
 import com.rabbi.payload.dto.UserDTO;
 import com.rabbi.payload.response.AuthResponse;
@@ -21,6 +23,8 @@ import java.time.LocalDateTime;
 public class AuthServiceImpl implements AuthService {
     private final UserRespository userRespository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
+    private final UserMapper userMapper;
 
     @Override
     public AuthResponse login(String email, String password) {
@@ -45,6 +49,14 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRespository.save(createUser);
         Authentication auth = new UsernamePasswordAuthenticationToken(savedUser.getEmail(), savedUser.getPassword());
         SecurityContextHolder.getContext().setAuthentication(auth);
+
+        String jwt = jwtProvider.generateToken(auth);
+        AuthResponse response = new AuthResponse();
+        response.setJwt(jwt);
+        response.setTitle("Welcome " + savedUser.getFullName());
+        response.setMessage("User registered successfully");
+        response.setUser(UserMapper.toDTO(savedUser));
+        return response;
     }
 
     @Override

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class JwtProvider {
@@ -38,9 +40,14 @@ public class JwtProvider {
 
         return String.valueOf(claims.get("email"));
     }
-    //TODO: populate roles from authorities (5:19)
+
+
     private String populateAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        return null;
+        Set<String> auths = new HashSet<>();
+        for(GrantedAuthority authority: authorities) {
+            auths.add(authority.getAuthority());
+        }
+        return String.join(",", auths);
     }
 
 }
