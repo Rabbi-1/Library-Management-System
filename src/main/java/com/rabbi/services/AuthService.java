@@ -6,8 +6,8 @@ import com.rabbi.payload.response.AuthResponse;
 
 public interface AuthService {
 
-    AuthResponse login(String email, String password);
+    AuthResponse login(String email, String password) throws UserException;
     AuthResponse signup(UserDTO req) throws UserException;
-    void createPasswordResetToken(String email);
+    void createPasswordResetToken(String email) throws UserException;
     void resetPassword(String token, String newPassword);
 }
