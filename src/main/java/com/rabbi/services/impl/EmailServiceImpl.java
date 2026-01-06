@@ -1,12 +1,14 @@
 package com.rabbi.services.impl;
 
 import com.rabbi.services.EmailService;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,8 +23,17 @@ public class EmailServiceImpl implements EmailService {
 
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+            helper.setSubject(subject);
+            helper.setText(body, true); // true indicates HTML
+            helper.setTo(to);
+            javaMailSender.send(mimeMessage);
+
         } catch (MailException e) {
             throw new MailSendException("Failed to send email");
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
 
 
