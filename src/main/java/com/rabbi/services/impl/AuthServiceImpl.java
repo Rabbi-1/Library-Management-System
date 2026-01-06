@@ -70,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse signup(UserDTO req) throws UserException {
         User user = userRespository.findByEmail(req.getEmail());
-        if (user == null) {
+        if (user != null) {
             throw new UserException("email id already registered");
         }
 
@@ -83,7 +83,15 @@ public class AuthServiceImpl implements AuthService {
         createUser.setRole(UserRole.RoLE_USER);
 
         User savedUser = userRespository.save(createUser);
-        Authentication auth = new UsernamePasswordAuthenticationToken(savedUser.getEmail(), savedUser.getPassword());
+
+        // Manually authenticate the user by creating an Authentication object
+        // and storing it in the SecurityContext so Spring Security treats
+        // the user as logged in for the current request
+        Authentication auth =
+                new UsernamePasswordAuthenticationToken(
+                        savedUser.getEmail(),
+                        savedUser.getPassword()
+                );
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         String jwt = jwtProvider.generateToken(auth);

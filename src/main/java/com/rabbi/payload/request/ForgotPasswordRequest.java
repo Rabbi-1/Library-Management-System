@@ -1,0 +1,14 @@
+package com.rabbi.payload.request;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ForgotPasswordRequest {
+    @NotNull(message = "Email cannot be null")
+    private String email;
+}
