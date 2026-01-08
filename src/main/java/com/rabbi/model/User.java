@@ -26,11 +26,11 @@ public class User {
     private String email;
     private String fullName;
     private UserRole role;
-    private String password;
     private String Phone;
     private AuthProvider authProvider = AuthProvider.LOCAL;
     private String googleId;
     private String profileImage;
+    private String password;
     private LocalDateTime lastLogin;
     @CreationTimestamp
     private LocalDateTime createdAt;

@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
+    private String password;
 
     private Long id;
 
@@ -20,9 +23,6 @@ public class UserDTO {
     @Size(max = 255, message = "Email must not exceed 255 characters")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, max = 100, message = "Password must be between 8 and 100 characters")
-    private String password;
 
 
     private String phone;
