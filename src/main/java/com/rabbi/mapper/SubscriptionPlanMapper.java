@@ -2,7 +2,9 @@ package com.rabbi.mapper;
 
 import com.rabbi.model.SubscriptionPlan;
 import com.rabbi.payload.dto.SubscriptionPlanDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SubscriptionPlanMapper {
 
     public SubscriptionPlanDTO toDTO(SubscriptionPlan plan) {
