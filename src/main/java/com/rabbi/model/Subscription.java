@@ -51,7 +51,7 @@ public class Subscription {
     private Boolean isActive = true;
 
 
-    private Boolean autoReview;
+    private Boolean autoRenew;
 
 
     private LocalDateTime cancelledDate;

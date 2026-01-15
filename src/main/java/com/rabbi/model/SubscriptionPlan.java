@@ -33,7 +33,7 @@ public class SubscriptionPlan {
     @Column(nullable = false)
     private Long price;
 
-    private String currency = "INR";
+    private String currency = "USD";
 
     @Column(nullable = false)
     @Positive(message = "Max books allowed must be greater than zero")
