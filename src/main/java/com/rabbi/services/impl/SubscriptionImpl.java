@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -35,29 +37,64 @@ public class SubscriptionImpl implements SubscriptionService {
         );
 
         Subscription subscription = subscriptionMapper.toEntity(subscriptionDTO);
+        //Will debug later
+        subscription.setUser(user);
+        subscription.setPlan(plan);
         subscription.initializeFromPlan();
         Subscription saved = subscriptionRepository.save(subscription);
 
         return subscriptionMapper.toDTO(saved);
     }
-
+    // was public SubscriptionDTO getUsersActiveSubscriptions(Long userId)
     @Override
-    public SubscriptionDTO getUsersActiveSubscriptions(Long userId) {
-        return null;
+    public SubscriptionDTO getUsersActiveSubscriptions() throws Exception {
+        User user = userService.getCurrentUser();
+        Subscription subscription = subscriptionRepository.findActiveSubscriptionByUserId(user.getId(), LocalDate.now())
+                .orElseThrow(() -> new SubscriptionException("Subscription Not Found"));
+        return subscriptionMapper.toDTO(subscription);
     }
 
     @Override
-    public SubscriptionDTO cancelSubscription(Long subscriptionId, String reason) {
-        return null;
+    public SubscriptionDTO cancelSubscription(Long subscriptionId, String reason) throws SubscriptionException {
+        Subscription subscription = subscriptionRepository.findById(subscriptionId)
+                .orElseThrow(() -> new SubscriptionException("Subscription not found with ID"));
+
+        if(!subscription.getIsActive()) {
+            throw new SubscriptionException("Subscription Not Active");
+        }
+        subscription.setIsActive(false);
+        subscription.setCancelledAt(LocalDateTime.now());
+        subscription.setCancellationReason(reason != null ? reason : "Cancelled by user");
+
+        subscription = subscriptionRepository.save(subscription);
+
+        return subscriptionMapper.toDTO(subscription);
     }
 
     @Override
-    public SubscriptionDTO activeSubscription(Long subscriptionId, Long paymentId) {
-        return null;
+    public SubscriptionDTO activeSubscription(Long subscriptionId, Long paymentId) throws SubscriptionException {
+
+        Subscription subscription = subscriptionRepository.findById(subscriptionId)
+                .orElseThrow(() -> new SubscriptionException("Subscription not found with ID"));
+        //verify payment
+        subscription.setIsActive(true);
+        subscription = subscriptionRepository.save(subscription);
+        return subscriptionMapper.toDTO(subscription);
     }
 
     @Override
     public List<SubscriptionDTO> getAllSubscriptions(Pageable pageable) {
-        return List.of();
+        List<Subscription> subscriptions = subscriptionRepository.findAll();
+        return subscriptionMapper.toDTOList(subscriptions);
+    }
+
+    @Override
+    public void deactivateSubscription(Long userId) throws SubscriptionException {
+        List<Subscription> expiredSubscriptions = subscriptionRepository
+                .findExpiredActiveSubscriptions(LocalDate.now());
+        for(Subscription subscription : expiredSubscriptions) {
+            subscription.setIsActive(false);
+            subscriptionRepository.save(subscription);
+        }
     }
 }

@@ -88,9 +88,4 @@ public class SubscriptionMapper {
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
-
-
-
-
-
 }

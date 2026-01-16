@@ -60,6 +60,8 @@ public class Subscription {
 
     private String notes;
 
+    private LocalDateTime cancelledAt;
+
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createdAt;
