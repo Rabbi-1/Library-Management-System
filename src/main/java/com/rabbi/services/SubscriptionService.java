@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SubscriptionService {
 
-    SubscriptionDTO subscribe(SubscriptionDTO subscriptionDTO);
+    SubscriptionDTO subscribe(SubscriptionDTO subscriptionDTO) throws Exception;
     SubscriptionDTO getUsersActiveSubscriptions(Long userId);
     SubscriptionDTO cancelSubscription(Long subscriptionId, String reason);
     SubscriptionDTO activeSubscription(Long subscriptionId, Long paymentId);
