@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 @Component
 public class SubscriptionMapper {
 
-    private final UserRespository userRespository;
-
     public SubscriptionDTO toDTO(Subscription subscription) {
         if(subscription == null) {
             return null;
@@ -54,7 +52,7 @@ public class SubscriptionMapper {
         return dto;
     }
 
-    public Subscription toEntity(SubscriptionDTO dto, SubscriptionPlan plan, User user) throws SubscriptionException {
+    public Subscription toEntity(SubscriptionDTO dto, SubscriptionPlan plan, User user) {
         if(dto == null) {
             return null;
         }

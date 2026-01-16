@@ -4,7 +4,6 @@ import com.rabbi.exception.SubscriptionException;
 import com.rabbi.payload.dto.SubscriptionDTO;
 import com.rabbi.payload.response.ApiResponse;
 import com.rabbi.services.SubscriptionService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Pageable;
