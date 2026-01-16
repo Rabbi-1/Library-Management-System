@@ -2,6 +2,7 @@ package com.rabbi.mapper;
 
 import com.rabbi.exception.SubscriptionException;
 import com.rabbi.model.Subscription;
+import com.rabbi.model.SubscriptionPlan;
 import com.rabbi.model.User;
 import com.rabbi.payload.dto.SubscriptionDTO;
 import com.rabbi.repo.UserRespository;
@@ -53,30 +54,34 @@ public class SubscriptionMapper {
         return dto;
     }
 
-    public Subscription toEntity(SubscriptionDTO dto) throws SubscriptionException {
+    public Subscription toEntity(SubscriptionDTO dto, SubscriptionPlan plan, User user) throws SubscriptionException {
         if(dto == null) {
             return null;
         }
         Subscription subscription = new Subscription();
         subscription.setId(dto.getId());
-        if(dto.getUserId() != null) {
-            User user = userRespository.findById(dto.getUserId())
-                    .orElseThrow(() -> new SubscriptionException("User not found"));
-            subscription.setUser(user);
-        }
-
-        subscription.setPlanName(dto.getPlanName());
-        subscription.setPlanCode(dto.getPlanCode());
-        subscription.setPrice(dto.getPrice());
-        subscription.setStartDate(dto.getStartDate());
-        subscription.setEndDate(dto.getEndDate());
-        subscription.setIsActive(dto.getIsActive() != null ? dto.getIsActive() : false);
-        subscription.setMaxBooksAllowed(dto.getMaxBooksAllowed());
-        subscription.setMaxDaysPerBook(dto.getMaxDaysPerBook());
-        subscription.setAutoRenew(dto.getAutoRenew() != null ? dto.getAutoRenew() : false);
-        subscription.setCancelledDate(dto.getCancelledAt());
-        subscription.setCancellationReason(dto.getCancellationReason());
+        subscription.setUser(user);
+        subscription.setPlan(plan);
         subscription.setNotes(dto.getNotes());
+
+//        if(dto.getUserId() != null) {
+//            User user = userRespository.findById(dto.getUserId())
+//                    .orElseThrow(() -> new SubscriptionException("User not found"));
+//            subscription.setUser(user);
+//        }
+
+//        subscription.setPlanName(dto.getPlanName());
+//        subscription.setPlanCode(dto.getPlanCode());
+//        subscription.setPrice(dto.getPrice());
+//        subscription.setStartDate(dto.getStartDate());
+//        subscription.setEndDate(dto.getEndDate());
+//        subscription.setIsActive(dto.getIsActive() != null ? dto.getIsActive() : false);
+//        subscription.setMaxBooksAllowed(dto.getMaxBooksAllowed());
+//        subscription.setMaxDaysPerBook(dto.getMaxDaysPerBook());
+//        subscription.setAutoRenew(dto.getAutoRenew() != null ? dto.getAutoRenew() : false);
+//        subscription.setCancelledDate(dto.getCancelledAt());
+//        subscription.setCancellationReason(dto.getCancellationReason());
+
         return subscription;
     }
 
