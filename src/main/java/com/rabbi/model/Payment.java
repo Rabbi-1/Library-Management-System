@@ -26,7 +26,7 @@ public class Payment {
     private Subscription subscription;
 
     private PaymentType paymentType;
-    private PaymentStatus paymentStatus;
+    private PaymentStatus status;
 
     @Enumerated(EnumType.STRING)
     private PaymentGateway gateway;
