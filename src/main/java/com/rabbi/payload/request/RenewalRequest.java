@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CheckoutRequest {
-    @NotNull(message = "Book ID is mandatory")
-    private Integer bookId;
+public class RenewalRequest {
+    @NotNull(message = "Book loan ID is mandatory")
+    private Long bookLoanId;
 
-    @Min(value = 1, message = "Checkout days must be at least 1")
-    private Integer checkoutDays = 14;
+    @Min(value = 1, message = "Extension days must be at least 1")
+    private Integer extensionDays = 14;
 
     private String notes;
-
 
 }
