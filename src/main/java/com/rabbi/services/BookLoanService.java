@@ -12,7 +12,7 @@ public interface BookLoanService {
 
     BookLoanDTO checkoutBook(CheckoutRequest checkoutRequest);
 
-    BookLoanDTO checkoutBookForUser(Long userId, CheckoutRequest checkoutRequest);
+    BookLoanDTO checkoutBookForUser(Long userId, CheckoutRequest checkoutRequest) throws Exception;
 
     BookLoanDTO checkinBook(CheckinRequest checkinRequest);
 

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CheckoutRequest {
     @NotNull(message = "Book ID is mandatory")
-    private Integer bookId;
+    private Long bookId;
 
     @Min(value = 1, message = "Checkout days must be at least 1")
     private Integer checkoutDays = 14;

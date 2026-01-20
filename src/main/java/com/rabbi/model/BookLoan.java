@@ -38,6 +38,8 @@ public class BookLoan {
     @Column(nullable = false)
     private LocalDate checkoutDate;
 
+    private LocalDate dueDate;
+
     @Column(nullable = false)
     private LocalDate returnDate;
 
