@@ -10,11 +10,11 @@ import com.rabbi.payload.response.PagesResponse;
 
 public interface BookLoanService {
 
-    BookLoanDTO checkoutBook(CheckoutRequest checkoutRequest);
+    BookLoanDTO checkoutBook(CheckoutRequest checkoutRequest) throws Exception;
 
     BookLoanDTO checkoutBookForUser(Long userId, CheckoutRequest checkoutRequest) throws Exception;
 
-    BookLoanDTO checkinBook(CheckinRequest checkinRequest);
+    BookLoanDTO checkinBook(CheckinRequest checkinRequest) throws Exception;
 
     BookLoanDTO renewCheckout(RenewalRequest renewalRequest);
 
