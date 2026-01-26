@@ -20,9 +20,16 @@ import com.rabbi.services.BookLoanService;
 import com.rabbi.services.SubscriptionService;
 import com.rabbi.services.UserService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -139,17 +146,58 @@ public class BookLoanServiceImpl implements BookLoanService {
     }
 
     @Override
-    public PagesResponse<BookLoanDTO> getMyBookLoans(BookLoanStatus status, int page, int size) {
-        return null;
+    public PagesResponse<BookLoanDTO> getMyBookLoans(BookLoanStatus status, int page, int size) throws Exception {
+        User currentUser = userService.getCurrentUser();
+        Page<BookLoan> bookLoanPage;
+
+        if(status != null) {
+            Pageable pageable = PageRequest.of(page, size, Sort.by("dueDate").ascending());
+            bookLoanPage = bookLoanRepository.findByStatusAndUser(status, currentUser, pageable);
+
+        } else{
+            Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+            bookLoanPage = bookLoanRepository.findByUserId(currentUser.getId(), pageable);
+        }
+            return convertToPageResponse(bookLoanPage);
     }
 
     @Override
-    public PagesResponse<BookLoanDTO> getBookLoans(BookLoanSearchRequest request) {
+    public PagesResponse<BookLoanDTO> getBookLoans(BookLoanSearchRequest request) throws Exception {
         return null;
     }
 
     @Override
     public int updateOverdueBookLoan() {
         return 0;
+    }
+
+
+
+
+    private Pageable createPageable(int page, int size, String sortBy, String sortDirection) {
+        size = Math.min(size, 100);
+        size = Math.max(size, 1);
+        Sort sort = sortDirection.equalsIgnoreCase("ASC")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        return PageRequest.of(page, size, sort);
+    }
+
+    private PagesResponse<BookLoanDTO> convertToPageResponse(Page<BookLoan> bookLoanPage) {
+        List<BookLoanDTO> bookLoanDTOs = bookLoanPage
+                .getContent()
+                .stream()
+                .map(bookLoanMapper::toDTO)
+                .collect(Collectors.toList());
+        return new PagesResponse<>(
+                bookLoanDTOs,
+                bookLoanPage.getNumber(),
+                bookLoanPage.getSize(),
+                bookLoanPage.getTotalElements(),
+                bookLoanPage.getTotalPages(),
+                bookLoanPage.isLast(),
+                bookLoanPage.isFirst(),
+                bookLoanPage.isEmpty()
+        );
     }
 }
