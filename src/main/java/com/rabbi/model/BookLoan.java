@@ -70,5 +70,8 @@ public class BookLoan {
     public boolean isActive() {
         return status==BookLoanStatus.CHECKED_OUT || status == BookLoanStatus.OVERDUE;
     }
+    public boolean canRenew() {
+        return status == BookLoanStatus.CHECKED_OUT && !isOverDue && renewalCount < maxRenewals;
+    }
 
 }
