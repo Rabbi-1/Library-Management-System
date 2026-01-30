@@ -1,7 +1,6 @@
 package com.rabbi.payload.request;
 
 import com.rabbi.domain.PaymentGateway;
-import com.rabbi.domain.PaymentType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;

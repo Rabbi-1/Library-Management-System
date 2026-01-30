@@ -2,7 +2,6 @@ package com.rabbi.payload.dto;
 
 import com.rabbi.domain.PaymentGateway;
 import com.rabbi.domain.PaymentStatus;
-import com.rabbi.domain.PaymentType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
