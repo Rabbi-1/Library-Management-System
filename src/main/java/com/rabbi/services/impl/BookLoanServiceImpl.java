@@ -28,6 +28,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -160,10 +161,42 @@ public class BookLoanServiceImpl implements BookLoanService {
         }
             return convertToPageResponse(bookLoanPage);
     }
-
+    //TODO: Review this
     @Override
-    public PagesResponse<BookLoanDTO> getBookLoans(BookLoanSearchRequest request) throws Exception {
-        return null;
+    public PagesResponse<BookLoanDTO> getBookLoans(BookLoanSearchRequest searchRequest) throws Exception {
+        Pageable pageable = createPageable(
+                searchRequest.getPage(),
+                searchRequest.getSize(),
+                searchRequest.getSortBy(),
+                searchRequest.getSortDirection()
+        );
+        Page<BookLoan> bookLoanPage;
+        if(Boolean.TRUE.equals(searchRequest.getOverdueOnly())) {
+            bookLoanPage = bookLoanRepository.findOverdueBookLoans(LocalDate.now(),pageable);
+        }
+        else if(searchRequest.getUserId() != null) {
+            bookLoanPage = bookLoanRepository.findByUserId(searchRequest.getUserId(), pageable);
+        }
+        else if (searchRequest.getBookId() != null) {
+            bookLoanPage = bookLoanRepository.findByBookId(searchRequest.getBookId(), pageable);
+        }
+        else if (searchRequest.getStatus() != null) {
+            // Fetch loans by loan status
+            bookLoanPage = bookLoanRepository.findByStatus(searchRequest.getStatus(), pageable);
+        }
+        else if (searchRequest.getStartDate() != null && searchRequest.getEndDate() != null) {
+            // Fetch loans within date range
+            bookLoanPage = bookLoanRepository
+                    .findBookLoansByDateRange(
+                            searchRequest.getStartDate(),
+                            searchRequest.getEndDate(),
+                            pageable
+                    );
+        } else {
+            bookLoanPage = bookLoanRepository.findAll(pageable);
+        }
+
+        return convertToPageResponse(bookLoanPage);
     }
 
     @Override
