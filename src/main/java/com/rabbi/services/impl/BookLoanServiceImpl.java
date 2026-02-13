@@ -28,7 +28,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -201,13 +201,28 @@ public class BookLoanServiceImpl implements BookLoanService {
 
     @Override
     public int updateOverdueBookLoan() {
-        return 0;
+        Pageable pageable = PageRequest.of(0, 1000);
+        Page<BookLoan> overduePage = bookLoanRepository
+                .findOverdueBookLoans(LocalDate.now(), pageable);
+        int updateCount = 0;
+        for(BookLoan bookLoan : overduePage.getContent()) {
+            if(bookLoan.getStatus() == BookLoanStatus.CHECKED_OUT) {
+                bookLoan.setStatus(BookLoanStatus.OVERDUE);
+                bookLoan.setIsOverDue(true);
+                int overdueDays = calculateOverdueData(bookLoan.getDueDate(), LocalDate.now());
+                bookLoanRepository.save(bookLoan);
+                updateCount++;
+
+            }
+        }
+        return updateCount;
     }
 
-
-
-
-    private Pageable createPageable(int page, int size, String sortBy, String sortDirection) {
+    private Pageable createPageable(int page,
+                                    int size,
+                                    String sortBy,
+                                    String sortDirection)
+    {
         size = Math.min(size, 100);
         size = Math.max(size, 1);
         Sort sort = sortDirection.equalsIgnoreCase("ASC")
@@ -232,5 +247,11 @@ public class BookLoanServiceImpl implements BookLoanService {
                 bookLoanPage.isFirst(),
                 bookLoanPage.isEmpty()
         );
+    }
+    public int calculateOverdueData(LocalDate dueDate, LocalDate today) {
+        if(today.isBefore(dueDate) || today.isEqual(dueDate)) {
+            return 0;
+        }
+        return (int) ChronoUnit.DAYS.between(dueDate, today);
     }
 }
