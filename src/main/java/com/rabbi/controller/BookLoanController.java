@@ -1,10 +1,14 @@
 package com.rabbi.controller;
 
 
+import com.rabbi.domain.BookLoanStatus;
 import com.rabbi.payload.dto.BookLoanDTO;
+import com.rabbi.payload.request.BookLoanSearchRequest;
 import com.rabbi.payload.request.CheckinRequest;
 import com.rabbi.payload.request.CheckoutRequest;
 import com.rabbi.payload.request.RenewalRequest;
+import com.rabbi.payload.response.ApiResponse;
+import com.rabbi.payload.response.PagesResponse;
 import com.rabbi.services.BookLoanService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +54,34 @@ public class BookLoanController {
                 .renewCheckout(renewalRequest);
 
         return new ResponseEntity<>(bookLoan, HttpStatus.OK);
+    }
+    @GetMapping("/my")
+    public ResponseEntity<?> getMyBookLoans(
+            @RequestParam(required = false) BookLoanStatus status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) throws Exception {
+
+        PagesResponse<BookLoanDTO> bookLoans = bookLoanService
+                .getMyBookLoans(status, page, size);
+
+        return ResponseEntity.ok(bookLoans);
+    }
+    @PostMapping("/search")
+    public ResponseEntity<?> getAllBookLoans(
+            @RequestBody BookLoanSearchRequest searchRequest) throws Exception {
+
+        PagesResponse<BookLoanDTO> bookLoans = bookLoanService
+                .getBookLoans(searchRequest);
+
+        return ResponseEntity.ok(bookLoans);
+    }
+    @PostMapping("/admin/update-overdue")
+    public ResponseEntity<?> updateOverdueBookLoans() {
+
+        int updateCount = bookLoanService.updateOverdueBookLoan();
+
+        return ResponseEntity.ok(
+                new ApiResponse("overdue book loans are updated", true)
+        );
     }
 }
