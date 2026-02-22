@@ -71,9 +71,11 @@ public class Book {
 
     @AssertTrue(message = "Available copies cannot exceed total copies")
     public boolean isAvailableCopiesValid() {
-        return availableCopies != null && availableCopies > 0;
+        return availableCopies != null
+                && totalCopies != null
+                && availableCopies <= totalCopies
+                && availableCopies >= 0;
     }
-
 }
     /**
     Book represents a single physical or logical book item in the system.

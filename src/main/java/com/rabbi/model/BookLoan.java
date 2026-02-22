@@ -41,7 +41,7 @@ public class BookLoan {
 
     private LocalDate dueDate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDate returnDate;
 
     @Column(nullable = false)
@@ -59,9 +59,9 @@ public class BookLoan {
     @Column(nullable = false)
     private Integer overdueDays = 0;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     @UpdateTimestamp

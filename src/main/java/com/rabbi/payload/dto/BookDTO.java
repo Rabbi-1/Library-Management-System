@@ -46,12 +46,19 @@ public class BookDTO {
     @Size(max = 2000, message = "Description must not exceed 2000 characters")
     private String description;
 
-    @Min(value = 0, message = "Available copies cannot be negative")
+//    @Min(value = 0, message = "Available copies cannot be negative")
+//    @NotNull(message = "Total copies is required")
+//    private Integer totalCopies;
+//
+//    @Min(value = 0, message = "Available copies cannot be negative")
+//    @NotNull(message = "Available copies is required")
+//    private Integer availableCopies;
     @NotNull(message = "Total copies is required")
+    @Min(value = 0, message = "Total copies cannot be negative")
     private Integer totalCopies;
 
-    @Min(value = 0, message = "Available copies cannot be negative")
     @NotNull(message = "Available copies is required")
+    @Min(value = 0, message = "Available copies cannot be negative")
     private Integer availableCopies;
 
     @NotNull(message = "Price is required")

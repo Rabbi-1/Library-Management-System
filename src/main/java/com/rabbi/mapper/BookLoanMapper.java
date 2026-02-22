@@ -47,7 +47,7 @@ public class BookLoanMapper {
         dto.setNotes(bookLoan.getNotes());
         dto.setIsOverDue(bookLoan.getIsOverDue());
         dto.setOverdueDays(bookLoan.getOverdueDays());
-        dto.setCreatedAt(bookLoan.getCreateAt());
+        dto.setCreatedAt(bookLoan.getCreatedAt());
         dto.setUpdatedAt(bookLoan.getUpdatedAt());
 
         return dto;
